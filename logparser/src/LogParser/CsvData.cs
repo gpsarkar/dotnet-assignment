@@ -1,5 +1,5 @@
 // Assuming the data in log file are in format 
-//  <date>(month/day) <Time>(hour:minute:second) <loglevel> : <text>
+//  <date>(month/day) <Time>(hour:minute:second) <loglevel> :. <text>
 //
 using System;
 using System.IO;
