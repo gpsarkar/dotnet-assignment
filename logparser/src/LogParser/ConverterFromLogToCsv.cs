@@ -5,7 +5,7 @@ namespace LogParser
 {
     public class ConverterFromLogToCSV
     {
-
+        private int count = 1;
         public void convert(Arguments args)
         {
             string[] logfiles = GetLogFiles(args.logdir);
@@ -19,14 +19,22 @@ namespace LogParser
         {
             var csv = new CsvFormatter();
 
-            using (var writter = new StreamWriter(csvfile))
+            
+            using (var writter = File.AppendText(csvfile))
             {
                 using (var reader = File.OpenText(filename))
                 {
-                        var line = reader.ReadLine();
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
                         var formatdata = csv.ParseLine(line);
+                        writter.WriteLine($"{count},{formatdata.GetString()}");
+                        count ++;
+                        line = reader.ReadLine();
+                    }
                 }
             }
+            //using (var writter = new StreamWriter(csvfile))
             // var newLine = string.Format("{0},{1}", first, second);
             // writter.WriteLine(line)
             //     csv.AppendLine(newLine);
