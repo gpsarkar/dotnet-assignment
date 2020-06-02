@@ -20,7 +20,7 @@ namespace LogParser
             var csv = new CsvFormatter();
 
             
-            using (var writter = File.AppendText(csvfile))
+            using (var writter = new StreamWriter(csvfile,true))
             {
                 using (var reader = File.OpenText(filename))
                 {
@@ -34,7 +34,8 @@ namespace LogParser
                     }
                 }
             }
-            //using (var writter = new StreamWriter(csvfile))
+            //using (var writter = new StreamWriter(csvfile,true))
+            //using (var writter = File.AppendText(csvfile))
             // var newLine = string.Format("{0},{1}", first, second);
             // writter.WriteLine(line)
             //     csv.AppendLine(newLine);
