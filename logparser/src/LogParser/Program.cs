@@ -30,12 +30,12 @@ namespace LogParser
             try
             {
                 conv.convert(parser.GetArgs());
+                Console.WriteLine("Data conveted Successfully");
             }
             catch(Exception es)
             {
                 Console.WriteLine(es);
             }
-            
         }
     }
 }
