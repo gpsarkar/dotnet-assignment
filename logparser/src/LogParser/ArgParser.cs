@@ -14,19 +14,18 @@ namespace LogParser
 
         public void ParseArgs(string[] args)
         {
-
+            if (Array.IndexOf(args, "--help") >= 0)
+            {
+                Help.PrintHelp();
+            }
             if (args.Length % 2 == 1)
             {
                 throw new ArgumentException("Invalid Number Of Arguments");
             }
-
             for (int i = 0; i < args.Length; i += 2)
             {
                 switch (args[i])
                 {
-                    case "--help":
-                        Help.PrintHelp();
-                        break;
                     case "--log-dir":
                         if (Directory.Exists(args[i + 1]))
                         {
@@ -38,7 +37,6 @@ namespace LogParser
                         }
                         break;
                     case "--log-level":
-
                         arguments.loglevel.Add(args[i + 1]);
                         break;
                     case "--csv":
@@ -54,7 +52,6 @@ namespace LogParser
                     default:
                         throw new ArgumentException($"Invalid Argument {args[i]}");
                 }
-
             }
             if( arguments.csv == "" || arguments.logdir == "" || arguments.loglevel.Count == 0)
             {

@@ -10,15 +10,15 @@ namespace LogParser
     {
         public CsvData ParseLine(string line)
         {
-            var csvdata = new CsvData()
-            String[] logdata = line.Split(":");
+            var csvdata = new CsvData();
+            String[] logdata = line.Split(":.");
             if (logdata.Length >= 2)
             {
                 csvdata.Text = logdata[1];
                 String[] loginfo = logdata[0].Trim().Split(' ');
                 csvdata.Date = GetDateString(loginfo[0]);
                 csvdata.Time = GetTimeString(loginfo[1]);
-                csvdata.Level = loginfo[2]
+                csvdata.Level = loginfo[2];
             }
             else
             {

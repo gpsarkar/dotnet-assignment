@@ -15,18 +15,21 @@ namespace LogParser
             }
         }
 
-        private void AppendToCsv(string filename, string csvfile)
+        private void AppendToCsv(string filename, string csvdir)
         {
             var csv = new CsvFormatter();
-
-            
-            using (var writter = new StreamWriter(csvfile,true))
+            using (var writter = new StreamWriter($"{csvdir}/log.csv",true))
             {
                 using (var reader = File.OpenText(filename))
                 {
                     var line = reader.ReadLine();
                     while (line != null)
                     {
+                        if(!CheckvalidLine(line))
+                        {
+                            line = reader.ReadLine();
+                            continue;
+                        }
                         var formatdata = csv.ParseLine(line);
                         writter.WriteLine($"{count},{formatdata.GetString()}");
                         count ++;
@@ -34,14 +37,11 @@ namespace LogParser
                     }
                 }
             }
-            //using (var writter = new StreamWriter(csvfile,true))
-            //using (var writter = File.AppendText(csvfile))
-            // var newLine = string.Format("{0},{1}", first, second);
-            // writter.WriteLine(line)
-            //     csv.AppendLine(newLine);
-            // AddRecordToCSV(data);
+        }
 
-            // File.WriteAllText(filePath, csv.ToString());
+        private bool CheckvalidLine(string line)
+        {
+            return line.Contains(":.");
         }
 
         private string[] GetLogFiles(string logdir)
