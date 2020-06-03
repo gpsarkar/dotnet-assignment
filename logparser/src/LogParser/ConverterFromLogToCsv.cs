@@ -11,28 +11,29 @@ namespace LogParser
             string[] logfiles = GetLogFiles(args.logdir);
             foreach (var filename in logfiles)
             {
-                AppendToCsv(filename, args.csv);
+                AppendToCsv(filename, args);
             }
         }
 
-        private void AppendToCsv(string filename, string csvdir)
+        private void AppendToCsv(string filename, Arguments args)
         {
             var csv = new CsvFormatter();
-            using (var writter = new StreamWriter($"{csvdir}/log.csv",true))
+            using (var writter = new StreamWriter($"{args.csv}/log.csv", true))
             {
                 using (var reader = File.OpenText(filename))
                 {
                     var line = reader.ReadLine();
                     while (line != null)
                     {
-                        if(!CheckvalidLine(line))
+                        if (CheckvalidLine(line))
                         {
-                            line = reader.ReadLine();
-                            continue;
+                            var formatdata = csv.ParseLine(line);
+                            if (args.loglevel.Contains(formatdata.GetString().Split(',')[0]))
+                            {
+                                writter.WriteLine($"{count},{formatdata.GetString()}");
+                                count++;
+                            }
                         }
-                        var formatdata = csv.ParseLine(line);
-                        writter.WriteLine($"{count},{formatdata.GetString()}");
-                        count ++;
                         line = reader.ReadLine();
                     }
                 }
