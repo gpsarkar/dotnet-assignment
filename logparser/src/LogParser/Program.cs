@@ -24,7 +24,7 @@ namespace LogParser
             }
             finally
             {
-                Console.WriteLine("");
+                Console.WriteLine("Somthing Is Wrong");
             }
             var conv = new ConverterFromLogToCSV();
             try
