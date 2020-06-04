@@ -11,7 +11,8 @@ namespace LeaveTracker
         {
             using( var reader = File.OpenText("employee.csv"))
             {
-                var entry = reader.ReadLine();
+                var entry = reader.ReadLine(); //skip first line as it is header
+                entry = reader.ReadLine();
                 while(entry != null)
                 {
                     var employ = entry.Split(",");
@@ -44,7 +45,11 @@ namespace LeaveTracker
                     Environment.Exit(0);
                 }
                 var id = int.Parse(input);
-                var success = GetEmployeeFromCsv(id);
+                if (GetEmployeeFromCsv(id))
+                {
+                    break;
+                }
+                Console.WriteLine("The ID is Invalid");
             }
         }
     }
