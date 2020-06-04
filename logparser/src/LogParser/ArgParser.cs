@@ -7,13 +7,11 @@ namespace LogParser
 {
     public class ArgParser
     {
-
         public readonly string[] level = {"INFO","ERROR","WARN","DEBUG"};
 
-        private Arguments arguments = new Arguments();
-
-        public void ParseArgs(string[] args)
+        public Arguments ParseArgs(string[] args)
         {
+            Arguments arguments = new Arguments();
             if (Array.IndexOf(args, "--help") >= 0)
             {
                 Help.PrintHelp();
@@ -57,9 +55,6 @@ namespace LogParser
             {
                 throw new ArgumentException("Auguments missing");
             }
-        }
-        public Arguments GetArgs()
-        {
             return arguments;
         }
     }
