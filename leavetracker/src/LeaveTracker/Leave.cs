@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 
 namespace LeaveTracker
 {
@@ -14,25 +13,21 @@ namespace LeaveTracker
         public DateTime EndDate { get; set; }
         public LeaveStatus Status { get; set; }
 
-        public bool AddLeave(Employee e)
+        public void GetDataFromUser(Employee e)
         {
-            using (var writter = File.AppendText($"Leave.csv"))
-            return true;
+            ID = e.ID;
+            Creator = e.Name;
+            Manager = EmployeeManager.GetEmployeeFromCsv(e.ManID).Name;
+            Console.WriteLine("Enter the title for the Leave: ");
+            var Title = Console.ReadLine();
+            Console.WriteLine("Enter Description For the Leave: ");
+            var Description = Console.ReadLine();
+            Console.WriteLine("Enter Start Date (DD-MM-YYYY): ");
+            var StartDate = Console.ReadLine();
+            Console.WriteLine("Enter End Date (DD-MM-YYYY): ");
+            var EndDate = Console.ReadLine();
+            Status = LeaveStatus.Pending ;
         }
 
-        public void EditLeaveStatus()
-        {
-            if(!CheckLeaveCsv())
-            {
-                using(var f = File.Create("Leave.csv"))
-                {
-                }
-            }
-        }
-
-        private bool CheckLeaveCsv()
-        {
-            return File.Exists("Leave.csv");
-        }
     }
 }
