@@ -6,30 +6,57 @@ namespace LeaveTracker
     {
         static void Main(string[] args)
         {
-            var emp = new EmployeeManager();
-            emp.login();
-            while (true)
+            var E = login();
+            var L = new LeaveManager();
+            var repeat = true;
+            while (repeat)
             {
                 PrintMenu();
-                var input = Console.ReadLine();
-                switch(input)
+                var menuinput = Console.ReadLine();
+                switch(menuinput)
                 {
                     case "1":
-                        //Createleave
+                        //Add Leave
+                        L.AddLeave(E);
                         break;
                     case "2":
                         //List leave
+                        L.ListLeave(E);
                         break;
                     case "3":
                         //update leave
+                        L.EditLeaveStatus(E);
                         break;
                     case "4":
                         //search leave
+                        var searchrepeat = true;
+                        while(searchrepeat)
+                        {
+                            PrintSearchMenu();
+                            var searchinput = Console.ReadLine();
+                            switch(searchinput)
+                            {
+                                case "1":
+                                    L.SearchLeaveByTitle(E);
+                                    break;
+                                case "2":
+                                    L.SearchLeaveByStatus(E);
+                                    break;
+                                case "3":
+                                    searchrepeat = false;
+                                    break;
+                                default:
+                                    Console.WriteLine("Invalid Input");
+                                    break;
+                            }
+                        }
                         break;
                     case "5":
                         //exit
+                        repeat = false;
                         break;
                     default:
+                        Console.WriteLine("Invalid Input");
                         break;
                 }
             }
@@ -44,11 +71,33 @@ namespace LeaveTracker
             Console.WriteLine("5. Logout");
         }
 
-        private static void SearchMenu()
+        private static void PrintSearchMenu()
         {
             Console.WriteLine("1. Search By Title");
             Console.WriteLine("2. Search By Status");
             Console.WriteLine("3. Back To Main Menu");
+        }
+        public static Employee login()
+        {
+            //TODO : add try catch
+            Employee E ;
+            while(true)
+            {
+                Console.WriteLine("Enter the Employee ID or q to quit: ");
+                var input = Console.ReadLine();
+                if (input == "q")
+                {
+                    Environment.Exit(0);
+                }
+                var id = int.Parse(input);
+                E = EmployeeManager.GetEmployeeFromCsv(id);
+                if (E.valid())
+                {
+                    break;
+                }
+                Console.WriteLine("The ID is Invalid");
+            }
+            return E ;
         }
     }
 }
