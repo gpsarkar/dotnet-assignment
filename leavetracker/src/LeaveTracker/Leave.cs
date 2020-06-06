@@ -13,21 +13,10 @@ namespace LeaveTracker
         public DateTime EndDate { get; set; }
         public LeaveStatus Status { get; set; }
 
-        public void GetDataFromUser(Employee e)
+        public override string ToString()
         {
-            ID = e.ID;
-            Creator = e.Name;
-            Manager = EmployeeManager.GetEmployeeFromCsv(e.ManID).Name;
-            Console.WriteLine("Enter the title for the Leave: ");
-            var Title = Console.ReadLine();
-            Console.WriteLine("Enter Description For the Leave: ");
-            var Description = Console.ReadLine();
-            Console.WriteLine("Enter Start Date (DD-MM-YYYY): ");
-            var StartDate = Console.ReadLine();
-            Console.WriteLine("Enter End Date (DD-MM-YYYY): ");
-            var EndDate = Console.ReadLine();
-            Status = LeaveStatus.Pending ;
+            return $"{ID},{Creator},{Manager},{Title},{Description},{StartDate.ToString()},{EndDate.ToString()},{Status}";
         }
-
+        
     }
 }
