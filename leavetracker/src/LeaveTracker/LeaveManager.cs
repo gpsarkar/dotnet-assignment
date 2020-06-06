@@ -46,12 +46,52 @@ namespace LeaveTracker
 
         internal void SearchLeaveByTitle(Employee e)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Enter the Complete or part of the title: ");
+            var s = Console.ReadLine();
+            int count = 0;
+            using (var reader = File.OpenText($"Leave.csv"))
+            {
+                Console.WriteLine("ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
+                var line = reader.ReadLine();
+                while( line != null)
+                {
+                    if (line.Split(",")[3].Contains(s))
+                    {
+                        Console.WriteLine(line);
+                        count++;
+                    }
+                    line = reader.ReadLine();
+                }
+                if(count == 0)
+                {
+                    Console.WriteLine("No entry Found for the title : '{s}'");
+                }
+            }
         }
 
         internal void SearchLeaveByStatus(Employee e)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Enter the Status(Pending / Approved / Rejected): ");
+            var s = (LeaveStatus)Enum.Parse(typeof(LeaveStatus),Console.ReadLine(), true);
+            int count = 0;
+            using (var reader = File.OpenText($"Leave.csv"))
+            {
+                Console.WriteLine("ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
+                var line = reader.ReadLine();
+                while( line != null)
+                {
+                    if ( s == (LeaveStatus)Enum.Parse(typeof(LeaveStatus),line.Split(",")[7], true))
+                    {
+                        Console.WriteLine(line);
+                        count++;
+                    }
+                    line = reader.ReadLine();
+                }
+                if(count == 0)
+                {
+                    Console.WriteLine("No entry Found for Status : '{s}'");
+                }
+            }
         }
 
         private bool CheckLeaveCsvFile()
