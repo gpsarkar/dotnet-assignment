@@ -5,6 +5,16 @@ namespace LeaveTracker
 {
     public class LeaveManager
     {
+        public LeaveManager()
+        {
+            if(!CheckLeaveCsvFile())
+            {
+                using(var f = File.Create("Leave.csv"))
+                {
+                }
+            }
+        }
+
         public void AddLeave(Employee e)
         {
             var L = GetLeaveObjectFromUser(e);
@@ -36,6 +46,7 @@ namespace LeaveTracker
 
         public void EditLeaveStatus(Employee e)
         {
+            // TODO : make the replace function
             if(!CheckLeaveCsvFile())
             {
                 using(var f = File.Create("Leave.csv"))
