@@ -11,13 +11,13 @@ namespace LogParser
         static void Main(string[] args)
         {
             var parser = new ArgParser();
-            var Arguments = Parsing(parser, args);
-            if (Arguments.CheckArgs())
+            var arguments = Parsing(parser, args);
+            if (arguments.CheckArgs())
             {
                 var conv = new ConverterFromLogToCSV();
                 try
                 {
-                    conv.convert(Arguments);
+                    conv.convert(arguments);
                     Console.WriteLine("Data conveted Successfully");
                 }
                 catch (Exception es)
