@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
 
 namespace LogParser
 {
@@ -16,6 +14,15 @@ namespace LogParser
             logdir = "";
             csv = "";
             loglevel = new List<string>();
+        }
+
+        public bool CheckArgs()
+        {
+            if( csv == "" || logdir == "" || loglevel.Count == 0)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

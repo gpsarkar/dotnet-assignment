@@ -2,7 +2,6 @@
 //  <date>(month/day) <Time>(hour:minute:second) <loglevel> :. <text>
 //
 using System;
-using System.IO;
 
 namespace LogParser
 {

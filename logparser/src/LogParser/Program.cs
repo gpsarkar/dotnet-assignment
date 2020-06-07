@@ -12,7 +12,7 @@ namespace LogParser
         {
             var parser = new ArgParser();
             var Arguments = Parsing(parser, args);
-            if (Arguments.logdir != "")
+            if (Arguments.CheckArgs())
             {
                 var conv = new ConverterFromLogToCSV();
                 try
