@@ -32,7 +32,7 @@ namespace LogParser.Tests
         [Fact]
         public void PassingCorrectArguments()
         {
-            string[] args = {"--log-dir","bin","--csv","bin","--log-level","INFO"};
+            string[] args = {"--log-dir","logfile","--csv","csvfile","--log-level","INFO"};
             var parser = new ArgParser();
             var  arguments = parser.ParseArgs(args);
             Assert.True(arguments.CheckArgs());
