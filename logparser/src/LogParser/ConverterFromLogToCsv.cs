@@ -5,7 +5,13 @@ namespace LogParser
 {
     public class ConverterFromLogToCSV
     {
-        private int count = 1;
+        public int count {get; set;}
+        
+        public ConverterFromLogToCSV()
+        {
+            count = 0;
+        }
+
         public void convert(Arguments args)
         {
             string[] logfiles = GetLogFiles(args.logdir);
@@ -30,8 +36,8 @@ namespace LogParser
                             var formatdata = csv.ParseLine(line);
                             if (args.loglevel.Contains(formatdata.GetString().Split(',')[0]))
                             {
-                                writter.WriteLine($"{count},{formatdata.GetString()}");
                                 count++;
+                                writter.WriteLine($"{count},{formatdata.GetString()}");
                             }
                         }
                         line = reader.ReadLine();
