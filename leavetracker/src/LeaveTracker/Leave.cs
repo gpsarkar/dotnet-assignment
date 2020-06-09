@@ -4,6 +4,7 @@ namespace LeaveTracker
 {
     public class Leave
     {
+        public int Index { get; set; }
         public int ID { get; set; }
         public string Creator { get; set; }
         public string Manager { get; set; }
@@ -15,7 +16,7 @@ namespace LeaveTracker
 
         public override string ToString()
         {
-            return $"{ID},{Creator},{Manager},{Title},{Description},{StartDate.ToString()},{EndDate.ToString()},{Status}";
+            return $"{Index},{ID},{Creator},{Manager},{Title},{Description},{StartDate.ToString()},{EndDate.ToString()},{Status}";
         }
         
     }
