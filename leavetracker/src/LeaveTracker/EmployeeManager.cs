@@ -8,19 +8,21 @@ namespace LeaveTracker
         public static Employee GetEmployeeFromCsv(int id)
         {
             var E = new Employee();
-            using( var reader = File.OpenText("employee.csv"))
+            using( var reader = File.OpenText("employees.csv"))
             {
                 var entry = reader.ReadLine(); //skip first line as it is header
-                while(reader.ReadLine() != null)
+                entry = reader.ReadLine();
+                while(entry != null)
                 {
                     var employ = entry.Split(",");
-                    if (int.Parse(employ[0]) == id )
+                    if (Int32.Parse(employ[0]) == id )
                     {
-                        E.ID = int.Parse(employ[0]);
+                        E.ID = Int32.Parse(employ[0]);
                         E.Name = employ[1];
-                        E.ManID = int.Parse(employ[2]);
+                        E.ManID = Int32.Parse(employ[2]);
                         break;
                     }
+                    entry = reader.ReadLine();
                 }
             }
             return E;
