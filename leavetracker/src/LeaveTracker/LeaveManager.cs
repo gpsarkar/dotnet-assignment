@@ -123,13 +123,23 @@ namespace LeaveTracker
 
         internal void SearchLeaveByStatus(Employee e)
         {
-            Console.WriteLine("Enter the Status(Pending / Approved / Rejected): ");
-            var s = (LeaveStatus)Enum.Parse(typeof(LeaveStatus), Console.ReadLine(), true);
+            LeaveStatus v;
+            while(true)
+            { 
+                Console.WriteLine("Enter the Status(Pending / Approved / Rejected): ");
+                var s = Console.ReadLine();
+                if (s == "Pending" || s == "Approved" || s == "Rejected")
+                {
+                    v = (LeaveStatus)Enum.Parse(typeof(LeaveStatus), s, true);
+                    break;
+                }
+                Console.WriteLine("Invalid Status");
+            }
             int count = 0;
             Console.WriteLine("Index,ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
             foreach (var l in L)
             {
-                if (l.Status == s)
+                if (l.Status == v)
                 {
                     Console.WriteLine(l.ToString());
                     count++;
@@ -137,7 +147,7 @@ namespace LeaveTracker
             }
             if (count == 0)
             {
-                Console.WriteLine($"No entry Found for the status : {s}");
+                Console.WriteLine($"No entry Found for the status : {v}");
             }
         }
 
