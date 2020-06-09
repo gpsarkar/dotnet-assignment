@@ -7,13 +7,14 @@ namespace LeaveTracker
         static void Main(string[] args)
         {
             var E = login();
+            Console.WriteLine($"Welcome {E.Name} !");
             var L = new LeaveManager();
             var repeat = true;
             while (repeat)
             {
                 PrintMenu();
                 var menuinput = Console.ReadLine();
-                switch(menuinput)
+                switch (menuinput)
                 {
                     case "1":
                         //Add Leave
@@ -30,11 +31,11 @@ namespace LeaveTracker
                     case "4":
                         //search leave
                         var searchrepeat = true;
-                        while(searchrepeat)
+                        while (searchrepeat)
                         {
                             PrintSearchMenu();
                             var searchinput = Console.ReadLine();
-                            switch(searchinput)
+                            switch (searchinput)
                             {
                                 case "1":
                                     L.SearchLeaveByTitle(E);
@@ -80,8 +81,8 @@ namespace LeaveTracker
         public static Employee login()
         {
             //TODO : add try catch
-            Employee E ;
-            while(true)
+            Employee E;
+            while (true)
             {
                 Console.WriteLine("Enter the Employee ID or q to quit: ");
                 var input = Console.ReadLine();
@@ -89,15 +90,26 @@ namespace LeaveTracker
                 {
                     Environment.Exit(0);
                 }
-                var id = int.Parse(input);
-                E = EmployeeManager.GetEmployeeFromCsv(id);
-                if (E.valid())
+                try
                 {
-                    break;
+                    var id = Int32.Parse(input);
+                    E = EmployeeManager.GetEmployeeFromCsv(id);
+                    if (E.valid())
+                    {
+                        break;
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
                 Console.WriteLine("The ID is Invalid");
             }
-            return E ;
+            return E;
         }
     }
 }
