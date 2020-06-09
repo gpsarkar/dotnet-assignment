@@ -19,14 +19,26 @@ namespace LeaveTracker
                     while (line != null)
                     {
                         L.Add(getLeaveObjectFromString(line));
-                        leavecount ++;
+                        leavecount++;
                         line = reader.ReadLine();
                     }
                 }
             }
         }
 
-        ~LeaveManager()
+        // ~LeaveManager()
+        // {
+        //     File.Delete("Leave.csv"); //delete old file and write new content
+        //     using (var writter = File.AppendText("Leave.csv"))
+        //     {
+        //         foreach (var l in L)
+        //         {
+        //             writter.WriteLine(l.ToString());
+        //         }
+        //     }
+        // }
+        
+        public void SaveData()
         {
             File.Delete("Leave.csv"); //delete old file and write new content
             using (var writter = File.AppendText("Leave.csv"))
@@ -41,7 +53,7 @@ namespace LeaveTracker
         public void AddLeave(Employee e)
         {
             L.Add(GetLeaveObjectFromUser(e));
-            leavecount ++;
+            leavecount++;
         }
 
         public void ListLeave(Employee e)
@@ -96,7 +108,7 @@ namespace LeaveTracker
                         Console.WriteLine("Index out of bound");
                     }
                 }
-                
+
             }
             return rstatus;
         }
@@ -124,8 +136,8 @@ namespace LeaveTracker
         internal void SearchLeaveByStatus(Employee e)
         {
             LeaveStatus v;
-            while(true)
-            { 
+            while (true)
+            {
                 Console.WriteLine("Enter the Status(Pending / Approved / Rejected): ");
                 var s = Console.ReadLine();
                 if (s == "Pending" || s == "Approved" || s == "Rejected")
