@@ -1,107 +1,143 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace LeaveTracker
 {
     public class LeaveManager
     {
+        private List<Leave> L = new List<Leave>();
+        private int leavecount = 0;
+
         public LeaveManager()
         {
-            if(!CheckLeaveCsvFile())
+            if (CheckLeaveCsvFile())
             {
-                using(var f = File.Create("Leave.csv"))
+                using (var reader = File.OpenText($"Leave.csv"))
                 {
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        L.Add(getLeaveObjectFromString(line));
+                        leavecount ++;
+                        line = reader.ReadLine();
+                    }
+                }
+            }
+        }
+
+        ~LeaveManager()
+        {
+            File.Delete("Leave.csv"); //delete old file and write new content
+            using (var writter = File.AppendText("Leave.csv"))
+            {
+                foreach (var l in L)
+                {
+                    writter.WriteLine(l.ToString());
                 }
             }
         }
 
         public void AddLeave(Employee e)
         {
-            var L = GetLeaveObjectFromUser(e);
-            AddLeaveToCSV(L);
+            L.Add(GetLeaveObjectFromUser(e));
+            leavecount ++;
         }
 
-        internal void ListLeave(Employee e)
+        public void ListLeave(Employee e)
         {
             int count = 0;
-            using (var reader = File.OpenText($"Leave.csv"))
+            Console.WriteLine("Index,ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
+            foreach (var l in L)
             {
-                Console.WriteLine("ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
-                var line = reader.ReadLine();
-                while( line != null)
+                if (e.ID == l.ID)
                 {
-                    if (e.ID == int.Parse(line.Split(",")[0]))
-                    {
-                        Console.WriteLine(line);
-                        count++;
-                    }
-                    line = reader.ReadLine();
+                    Console.WriteLine(l.ToString());
+                    count++;
                 }
-                if(count == 0)
-                {
-                    Console.WriteLine("No entry Found for the current user");
-                }
+            }
+            if (count == 0)
+            {
+                Console.WriteLine($"No entry Found for the user : {e.Name}");
             }
         }
 
-        public void EditLeaveStatus(Employee e)
+        public bool EditLeaveStatus(Employee e)
         {
-            // TODO : make the replace function
-            if(!CheckLeaveCsvFile())
+            var rstatus = false;
+            int count = 0;
+            Console.WriteLine("Index,ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
+            foreach (var l in L)
             {
-                using(var f = File.Create("Leave.csv"))
+                if (l.Status == LeaveStatus.Pending && l.Manager == e.Name)
                 {
+                    Console.WriteLine(l.ToString());
+                    count++;
                 }
             }
+            if (count == 0)
+            {
+                Console.WriteLine("No Editable Leave found");
+            }
+            else
+            {
+                Console.WriteLine("Enter the index of the leave you want to edit: ");
+                var i = Console.ReadLine();
+                foreach (var l in L)
+                {
+                    if (l.Index == int.Parse(i))
+                    {
+                        Console.WriteLine("Enter the new Status (Approved , Rejected)");
+                        l.Status = (LeaveStatus)Enum.Parse(typeof(LeaveStatus), Console.ReadLine(), true);
+                        rstatus = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Index out of bound");
+                    }
+                }
+                
+            }
+            return rstatus;
         }
 
-        internal void SearchLeaveByTitle(Employee e)
+        public void SearchLeaveByTitle(Employee e)
         {
             Console.WriteLine("Enter the Complete or part of the title: ");
             var s = Console.ReadLine();
             int count = 0;
-            using (var reader = File.OpenText($"Leave.csv"))
+            Console.WriteLine("Index,ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
+            foreach (var l in L)
             {
-                Console.WriteLine("ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
-                var line = reader.ReadLine();
-                while( line != null)
+                if (l.Title.Contains(s))
                 {
-                    if (line.Split(",")[3].Contains(s))
-                    {
-                        Console.WriteLine(line);
-                        count++;
-                    }
-                    line = reader.ReadLine();
+                    Console.WriteLine(l.ToString());
+                    count++;
                 }
-                if(count == 0)
-                {
-                    Console.WriteLine("No entry Found for the title : '{s}'");
-                }
+            }
+            if (count == 0)
+            {
+                Console.WriteLine($"No entry Found for the Title : {s}");
             }
         }
 
         internal void SearchLeaveByStatus(Employee e)
         {
             Console.WriteLine("Enter the Status(Pending / Approved / Rejected): ");
-            var s = (LeaveStatus)Enum.Parse(typeof(LeaveStatus),Console.ReadLine(), true);
+            var s = (LeaveStatus)Enum.Parse(typeof(LeaveStatus), Console.ReadLine(), true);
             int count = 0;
-            using (var reader = File.OpenText($"Leave.csv"))
+            Console.WriteLine("Index,ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
+            foreach (var l in L)
             {
-                Console.WriteLine("ID, Creator, Manager, Title, Description, Start-Date, End-Date, Status");
-                var line = reader.ReadLine();
-                while( line != null)
+                if (l.Status == s)
                 {
-                    if ( s == (LeaveStatus)Enum.Parse(typeof(LeaveStatus),line.Split(",")[7], true))
-                    {
-                        Console.WriteLine(line);
-                        count++;
-                    }
-                    line = reader.ReadLine();
+                    Console.WriteLine(l.ToString());
+                    count++;
                 }
-                if(count == 0)
-                {
-                    Console.WriteLine("No entry Found for Status : '{s}'");
-                }
+            }
+            if (count == 0)
+            {
+                Console.WriteLine($"No entry Found for the status : {s}");
             }
         }
 
@@ -110,18 +146,10 @@ namespace LeaveTracker
             return File.Exists("Leave.csv");
         }
 
-        public bool AddLeaveToCSV(Leave l)
-        {
-            using (var writter = File.AppendText($"Leave.csv"))
-            {
-                writter.WriteLine(l.ToString());
-            }
-            return true;
-        }
-
         public Leave GetLeaveObjectFromUser(Employee e)
         {
             var l = new Leave();
+            l.Index = leavecount + 1;
             l.ID = e.ID;
             l.Creator = e.Name;
             l.Manager = EmployeeManager.GetEmployeeFromCsv(e.ManID).Name;
@@ -133,7 +161,7 @@ namespace LeaveTracker
             l.StartDate = DateTime.Parse(Console.ReadLine());
             Console.WriteLine("Enter End Date (DD-MM-YYYY): ");
             l.EndDate = DateTime.Parse(Console.ReadLine());
-            l.Status = LeaveStatus.Pending ;
+            l.Status = LeaveStatus.Pending;
             return l;
         }
 
@@ -141,14 +169,15 @@ namespace LeaveTracker
         {
             var l = new Leave();
             var fields = line.Split(",");
-            l.ID = int.Parse(fields[0]);
-            l.Creator = fields[1];
-            l.Manager = fields[2];
-            l.Title = fields[3];
-            l.Description = fields[4];
-            l.StartDate = DateTime.Parse(fields[5]);
-            l.EndDate = DateTime.Parse(fields[6]);
-            l.Status = (LeaveStatus)Enum.Parse(typeof(LeaveStatus), fields[7], true);
+            l.Index = int.Parse(fields[0]);
+            l.ID = int.Parse(fields[1]);
+            l.Creator = fields[2];
+            l.Manager = fields[3];
+            l.Title = fields[4];
+            l.Description = fields[5];
+            l.StartDate = DateTime.Parse(fields[6]);
+            l.EndDate = DateTime.Parse(fields[7]);
+            l.Status = (LeaveStatus)Enum.Parse(typeof(LeaveStatus), fields[8], true);
             return l;
         }
     }
