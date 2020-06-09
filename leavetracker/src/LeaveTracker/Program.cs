@@ -7,11 +7,11 @@ namespace LeaveTracker
         static void Main(string[] args)
         {
             var E = login();
-            Console.WriteLine($"Welcome {E.Name} !");
             var L = new LeaveManager();
             var repeat = true;
             while (repeat)
             {
+                Console.WriteLine($"Welcome {E.Name} !");
                 PrintMenu();
                 var menuinput = Console.ReadLine();
                 switch (menuinput)
@@ -61,6 +61,7 @@ namespace LeaveTracker
                         break;
                 }
             }
+            L.SaveData();
         }
 
         private static void PrintMenu()
