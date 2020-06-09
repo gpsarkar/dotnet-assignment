@@ -19,7 +19,10 @@ namespace LeaveTracker
                     {
                         E.ID = Int32.Parse(employ[0]);
                         E.Name = employ[1];
-                        E.ManID = Int32.Parse(employ[2]);
+                        if(employ[2] != "")
+                        {
+                            E.ManID = Int32.Parse(employ[2]);
+                        }
                         break;
                     }
                     entry = reader.ReadLine();
