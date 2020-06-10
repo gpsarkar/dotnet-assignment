@@ -5,10 +5,12 @@ namespace LogParser
 {
     public class ArgParser
     {
+        // GS - Should be private, also var `level` never used.
         public readonly string[] level = {"INFO","ERROR","WARN","DEBUG"};
 
         public Arguments ParseArgs(string[] args)
         {
+            // GS - use simple type `var arguments = new Arguments();`
             Arguments arguments = new Arguments();
             if (Array.IndexOf(args, "--help") >= 0)
             {

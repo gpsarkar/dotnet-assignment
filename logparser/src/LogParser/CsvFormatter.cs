@@ -11,7 +11,7 @@ namespace LogParser
         public CsvData ParseLine(string line)
         {
             var csvdata = new CsvData();
-            String[] logdata = line.Split(":.");
+            String[] logdata = line.Split(":."); // GS - use var everywhere
             if (logdata.Length >= 2)
             {
                 csvdata.Text = logdata[1];
@@ -37,7 +37,7 @@ namespace LogParser
         {
             string[] strdate = v.Split('/');
             var date = new DateTime(2020, int.Parse(strdate[0]), int.Parse(strdate[1]));
-            return String.Format("{0:dd MMMM yyyy}", date);
+            return String.Format("{0:dd MMMM yyyy}", date); // GS - Use string interpolation everywhere -- return $"{date:dd MMMM yyyy}";
         }
     }
 }

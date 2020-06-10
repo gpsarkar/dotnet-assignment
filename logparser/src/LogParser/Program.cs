@@ -10,7 +10,7 @@ namespace LogParser
     {
         static void Main(string[] args)
         {
-            var parser = new ArgParser();
+            var parser = new ArgParser();  // Can move statement inside Parsing() method, as this has no other use in this function
             var arguments = Parsing(parser, args);
             if (arguments.CheckArgs())
             {
@@ -26,6 +26,7 @@ namespace LogParser
                 }
             }
         }
+
 
         private static Arguments Parsing(ArgParser parser, string[] args)
         {

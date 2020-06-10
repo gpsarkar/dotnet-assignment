@@ -7,7 +7,7 @@ namespace LogParser
     {
         public string logdir;
         public string csv;
-        public List<String> loglevel;
+        public List<String> loglevel; // GS - use built in type everywhere `string` instead of `String, `int` instead of `Int32` etc
 
         public Arguments()
         {
@@ -18,7 +18,10 @@ namespace LogParser
 
         public bool CheckArgs()
         {
-            if( csv == "" || logdir == "" || loglevel.Count == 0)
+            // GS - can be simplified as 
+            // return csv != "" && logdir != "" && loglevel.Count != 0;
+
+            if ( csv == "" || logdir == "" || loglevel.Count == 0)
             {
                 return false;
             }

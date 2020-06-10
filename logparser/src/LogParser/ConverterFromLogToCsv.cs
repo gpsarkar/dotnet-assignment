@@ -5,14 +5,15 @@ namespace LogParser
 {
     public class ConverterFromLogToCSV
     {
-        public int count {get; set;}
+        public int count {get; set;} // GS - Make private if use only inside class
         
         public ConverterFromLogToCSV()
         {
             count = 0;
         }
 
-        public void convert(Arguments args)
+        // GS - Just a convention - Public method should begin with upperccase `Convert()`
+        public void convert(Arguments args) 
         {
             string[] logfiles = GetLogFiles(args.logdir);
             foreach (var filename in logfiles)
@@ -24,6 +25,21 @@ namespace LogParser
         private void AppendToCsv(string filename, Arguments args)
         {
             var csv = new CsvFormatter();
+
+            // GS - FYI - Using can be used in a new way with C#8
+            // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/using#detailed-design
+            // It makes your statements like this:-
+            /*------
+                using var writer = new StreamWriter($"{args.csv}/log.csv", true);
+                using var reader = File.OpenText(filename);
+                var line = reader.ReadLine();
+                while (line != null)
+                {
+                    ....
+                    ....
+                    ...
+                }
+            -----*/
             using (var writter = new StreamWriter($"{args.csv}/log.csv", true))
             {
                 using (var reader = File.OpenText(filename))
@@ -46,12 +62,12 @@ namespace LogParser
             }
         }
 
-        private bool CheckvalidLine(string line)
+        private bool CheckvalidLine(string line) // GS - Simple method like this can be made static
         {
             return line.Contains(":.");
         }
 
-        private string[] GetLogFiles(string logdir)
+        private string[] GetLogFiles(string logdir) // GS - Simple method like this can be made static
         {
             string[] logfiles = Directory.GetFiles(logdir, "*.log", SearchOption.AllDirectories);
             return logfiles;
